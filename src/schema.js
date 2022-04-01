@@ -24,6 +24,21 @@ const typeDefs = gql`
         deaths: Int
         healing: Int
     }
+
+    type RegisteredGuild {
+        guildId: String! @unique
+        guildName: String
+        discordChannels: [DiscordChannel!]! @relationship(type: "PUBLISHES_TO", direction: OUT)
+    }
+
+    type DiscordChannel {
+        channelId: String! @unique
+        registeredGuilds: [RegisteredGuild!]! @relationship(type: "PUBLISHES_TO", direction: IN)
+    }
+
+    type Mutation {
+        registerGuild(guildId: String!, guildName: String!, channelId: String!): RegisteredGuild
+    }
 `;
 
 module.exports = typeDefs;
